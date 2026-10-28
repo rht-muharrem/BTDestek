@@ -338,12 +338,3 @@ Veritabanı şeması değiştiyse ayrıca `dotnet ef database update` çalışt�
 Chrome'un açılışta doğrudan bu adresi açması için Group Policy'de
 `RestoreOnStartupURLs` ayarını `http://192.168.2.185:8080` yapabilirsin.
 
-
-## Sonraki Adımlar (Öneriler)
-
-1. **Gerçek e-posta gönderimi**: SMTP bilgileriniz geldiğinde `ConsoleEmailService`'i değiştirmek.
-2. **Gerçek dosya depolama**: Ekler şu an veritabanında base64 olarak duruyor; büyük dosya hacmi
-   için Azure Blob Storage / disk tabanlı depolamaya geçiş düşünülebilir.
-3. **Refresh token**: JWT süresi dolunca kullanıcı tekrar giriş yapmak zorunda kalıyor (oturum
-   uyarısı zaten var, ama otomatik yenileme sadece Windows Authentication kullanıcıları için çalışıyor).
-4. **Migration'a geçiş**: Yukarıdaki "Migration Kullanmak İstersen" bölümü.
