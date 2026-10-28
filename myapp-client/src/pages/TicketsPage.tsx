@@ -48,19 +48,14 @@ export function TicketsPage() {
   const [categoryFilter, setCategoryFilter] = useState<TicketCategory | 'All'>('All');
   const [searchText, setSearchText] = useState('');
   const [expandedId, setExpandedId] = useState<number | null>(null);
-  // Gerçek zamanlı gelen yeni talepleri kısa süreliğine vurgulamak için
   const [flashIds, setFlashIds] = useState<Set<number>>(new Set());
-  // "Onayla ve Kapat" ile az önce kapatılan ama henüz puanlanmamış talepler —
-  // puanlama fırsatı verilene kadar "Tümü" görünümünden kaybolmasınlar diye.
   const [pendingRatingIds, setPendingRatingIds] = useState<Set<number>>(new Set());
 
-  // Toplu işlem + birleştirme (sadece IT personeli)
   const [selectedIds, setSelectedIds] = useState<Set<number>>(new Set());
   const [showMergePanel, setShowMergePanel] = useState(false);
   const [mergeTargetId, setMergeTargetId] = useState<number | null>(null);
   const [bulkStatus, setBulkStatus] = useState<TicketStatus>('InProgress');
 
-  // SLA geri sayımının canlı kalması için 30 saniyede bir güncellenen saat
   const [now, setNow] = useState(Date.now());
   useEffect(() => {
     const interval = setInterval(() => setNow(Date.now()), 30000);
@@ -82,15 +77,12 @@ export function TicketsPage() {
         .getMine()
         .then((assets) => {
           setMyAssets(assets);
-          // Kullanıcının üzerine zimmetli bir cihazı varsa, forma açılırken otomatik seçili gelsin.
           if (assets.length > 0) setAssetId(assets[0].id);
         })
         .catch(() => {});
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // Gerçek zamanlı: personel ekranındayken yeni talep açıldığı anda listeye düşer + kısa vurgu
   useEffect(() => {
     if (!connection || !isStaff) return;
 
@@ -274,7 +266,6 @@ export function TicketsPage() {
     }
   }
 
-  // SLA hedefine göre kalan/aşan süreyi hesaplar (sadece açık/işlemdeki talepler için)
   function getSlaInfo(t: Ticket): { text: string; overdue: boolean; urgent: boolean } | null {
     if (t.status !== 'Open' && t.status !== 'InProgress') return null;
     const deadline = new Date(t.createdAt).getTime() + t.slaHours * 3600 * 1000;
@@ -284,7 +275,7 @@ export function TicketsPage() {
     const hours = Math.floor(abs / 3600000);
     const mins = Math.floor((abs % 3600000) / 60000);
     const text = overdue ? `SLA aşıldı — ${hours}sa ${mins}dk` : `SLA: ${hours}sa ${mins}dk kaldı`;
-    const urgent = !overdue && diffMs < 2 * 3600 * 1000; // son 2 saat içinde
+    const urgent = !overdue && diffMs < 2 * 3600 * 1000;
     return { text, overdue, urgent };
   }
 
@@ -292,11 +283,8 @@ export function TicketsPage() {
     const awaitingRating = pendingRatingIds.has(t.id);
 
     if (statusFilter === 'All') {
-      // "Tümü" görünümünde kapatılanlar gizli — ama az önce onaylanıp henüz
-      // puanlanmamışsa, kullanıcı puan verene kadar listede kalsın.
       if (t.status === 'Closed' && !awaitingRating) return false;
     } else if (t.status !== statusFilter && !awaitingRating) {
-      // Hangi sekmede olursa olsun, puanlama bekleyen talep filtreden düşmesin.
       return false;
     }
     if (isStaff && categoryFilter !== 'All' && t.category !== categoryFilter) return false;

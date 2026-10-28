@@ -7,10 +7,10 @@ echo   DESTEK MASASI - Baslatiliyor
 echo ==========================================
 echo.
 
-REM Bu dosyanin bulundugu klasore gec (nereden calistirilirsa calistirilsin dogru calissin)
+
 cd /d "%~dp0"
 
-REM --- Gereksinim kontrolu ---
+
 where dotnet >nul 2>nul
 if errorlevel 1 (
     echo [HATA] .NET SDK bulunamadi.
@@ -29,7 +29,7 @@ if errorlevel 1 (
     exit /b 1
 )
 
-REM --- Frontend paketleri kurulu mu? ---
+
 if not exist "myapp-client\node_modules" (
     echo [1/3] Frontend paketleri ilk kez kuruluyor, bu birkac dakika surebilir...
     cd myapp-client
@@ -38,18 +38,18 @@ if not exist "myapp-client\node_modules" (
     echo.
 )
 
-REM --- Backend'i ayri pencerede baslat ---
+
 echo [2/3] Backend baslatiliyor... ^(http://localhost:5000^)
 start "Destek Masasi - Backend (API)" cmd /k "cd /d "%~dp0MyApp.Api" && dotnet run"
 
-REM Backend'in ayaga kalkmasi icin kisa bir sure bekle
+
 timeout /t 6 /nobreak >nul
 
-REM --- Frontend'i ayri pencerede baslat ---
+
 echo [3/3] Frontend baslatiliyor... ^(http://localhost:5173^)
 start "Destek Masasi - Frontend (React)" cmd /k "cd /d "%~dp0myapp-client" && npm run dev"
 
-REM Vite'in ayaga kalkmasi icin bekle, sonra tarayiciyi ac
+
 timeout /t 8 /nobreak >nul
 start http://localhost:5173
 

@@ -37,8 +37,6 @@ public class AssetsController : ControllerBase
         );
     }
 
-    // IT personeli -> tüm envanteri görür. Normal kullanıcı -> sadece bu endpoint'i kullanamaz,
-    // "mine" endpoint'ini kullanır (kendi cihazlarını görmek için).
     [HttpGet]
     [Authorize(Roles = "ITStaff")]
     public async Task<ActionResult<IEnumerable<AssetResponse>>> GetAll([FromQuery] string? search, [FromQuery] string? type)
@@ -64,7 +62,6 @@ public class AssetsController : ControllerBase
         return Ok(results);
     }
 
-    // Kendi üzerine kayıtlı cihazlar -> talep açarken "hangi cihaz" seçimi için kullanılır.
     [HttpGet("mine")]
     public async Task<ActionResult<IEnumerable<AssetResponse>>> GetMine()
     {
@@ -86,7 +83,6 @@ public class AssetsController : ControllerBase
         return Ok(await ToResponseAsync(asset));
     }
 
-    // Bir cihazın geçmişindeki tüm talepler -> "PC-000142 daha önce hangi sorunları yaşamış?"
     [HttpGet("{id:int}/tickets")]
     [Authorize(Roles = "ITStaff")]
     public async Task<ActionResult<IEnumerable<AssetTicketHistoryItem>>> GetTicketHistory(int id)

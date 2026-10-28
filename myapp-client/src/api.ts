@@ -18,9 +18,6 @@ import type {
   TicketStatus,
 } from './types';
 
-// Geliştirmede backend ayrı portta (5000), üretimde ise backend hem API'yi hem
-// React dosyalarını aynı adresten sunar — bu yüzden üretimde göreli yol kullanılır.
-// .env.development içindeki VITE_API_URL değeri geliştirme adresini belirler.
 const API_BASE_URL = `${import.meta.env.VITE_API_URL ?? ''}/api`;
 
 function getToken(): string | null {
@@ -44,8 +41,6 @@ function authHeaders(): HeadersInit {
 function jsonHeaders(): HeadersInit {
   return { 'Content-Type': 'application/json', ...authHeaders() };
 }
-
-// ---------- AUTH ----------
 
 interface AuthResponse {
   token: string;
@@ -89,8 +84,6 @@ export const authApi = {
     return { token: res.token, user: toAuthUser(res) };
   },
 };
-
-// ---------- TICKETS ----------
 
 export interface TicketFilters {
   search?: string;
@@ -204,8 +197,6 @@ export const ticketsApi = {
     }).then((r) => handleResponse<Ticket[]>(r)),
 };
 
-// ---------- NOTIFICATIONS ----------
-
 export const notificationsApi = {
   getAll: (): Promise<AppNotification[]> =>
     fetch(`${API_BASE_URL}/notifications`, { headers: authHeaders() }).then((r) =>
@@ -223,8 +214,6 @@ export const notificationsApi = {
     ),
 };
 
-// ---------- ADMIN (USERS) ----------
-
 export const usersApi = {
   getAll: (): Promise<AdminUser[]> =>
     fetch(`${API_BASE_URL}/users`, { headers: authHeaders() }).then((r) => handleResponse<AdminUser[]>(r)),
@@ -237,7 +226,6 @@ export const usersApi = {
     }).then((r) => handleResponse<void>(r)),
 };
 
-// ---------- REPORTS ----------
 
 export const reportsApi = {
   summary: (): Promise<ReportSummary> =>
@@ -258,8 +246,6 @@ export const auditApi = {
     );
   },
 };
-
-// ---------- ASSETS (Envanter) ----------
 
 export const assetsApi = {
   getAll: (filters?: { search?: string; type?: AssetType | 'All' }): Promise<Asset[]> => {
@@ -336,8 +322,6 @@ export const assetsApi = {
     ),
 };
 
-// ---------- AI ÖNERİ ----------
-
 export const aiApi = {
   suggest: (title: string, description: string): Promise<AiSuggestion> =>
     fetch(`${API_BASE_URL}/ai/suggest`, {
@@ -353,8 +337,6 @@ export const aiApi = {
       body: JSON.stringify({ title, description }),
     }).then((r) => handleResponse<SolutionSuggestion>(r)),
 };
-
-// ---------- MARKA AYARLARI ----------
 
 export const brandingApi = {
   get: (): Promise<BrandSettings> =>

@@ -1,5 +1,4 @@
-// "Yükleniyor..." yazısı yerine, gelecek içeriğin şeklini taklit eden
-// parlayan bloklar — bekleme süresi daha kısa hissettirir.
+
 export function SkeletonList({ rows = 4 }: { rows?: number }) {
   return (
     <div aria-busy="true" aria-label="Yükleniyor">

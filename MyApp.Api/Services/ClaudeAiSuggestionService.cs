@@ -4,10 +4,6 @@ using MyApp.Api.Models;
 
 namespace MyApp.Api.Services;
 
-// Gerçek AI önerisi: Anthropic Claude API'sini çağırır. Kullanmak için appsettings.json'a
-// kendi API anahtarını ekleyip Program.cs'te servis kaydını bu sınıfa çevirmen yeterli
-// (bkz. README.md "AI Katmanı" bölümü). RuleBasedAiSuggestionService ile aynı arayüzü
-// kullandığı için geri kalan kodda (controller, frontend) HİÇBİR değişiklik gerekmez.
 public class ClaudeAiSuggestionService : IAiSuggestionService
 {
     private readonly HttpClient _http;
@@ -73,8 +69,6 @@ public class ClaudeAiSuggestionService : IAiSuggestionService
             var responseJson = await response.Content.ReadAsStringAsync();
             using var doc = JsonDocument.Parse(responseJson);
             var text = doc.RootElement.GetProperty("content")[0].GetProperty("text").GetString() ?? "{}";
-
-            // Model bazen JSON'u ```json ... ``` bloğu içine sarabilir, temizle.
             text = text.Trim().Trim('`').Replace("json\n", "").Trim();
 
             var parsed = JsonSerializer.Deserialize<ClaudeSuggestionJson>(text, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
@@ -94,8 +88,6 @@ public class ClaudeAiSuggestionService : IAiSuggestionService
         }
         catch (Exception ex)
         {
-            // API çağrısı başarısız olursa (anahtar hatalı, ağ sorunu, kota vb.) kural tabanlı
-            // öneriye sessizce düş — kullanıcı hiçbir hata görmez, sadece daha basit bir öneri alır.
             _logger.LogWarning(ex, "Claude API çağrısı başarısız oldu, kural tabanlı öneriye düşülüyor.");
             return await _fallback.SuggestAsync(title, description, recentTickets);
         }

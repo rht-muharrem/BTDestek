@@ -7,7 +7,6 @@ import { RealtimeProvider } from './RealtimeContext';
 import { BrandingProvider } from './BrandingContext';
 import './index.css';
 
-// Sayfa render edilmeden önce kayıtlı temayı uygula (aydınlık->karanlık geçiş flaşını önler)
 const storedTheme = localStorage.getItem('theme');
 const initialTheme =
   storedTheme === 'dark' || storedTheme === 'light'

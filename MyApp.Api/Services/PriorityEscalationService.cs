@@ -4,14 +4,11 @@ using MyApp.Api.Models;
 
 namespace MyApp.Api.Services;
 
-// Belirli bir süre atanmadan bekleyen taleplerin önceliğini otomatik yükseltir.
-// Demo/geliştirme amaçlı: her 30 saniyede bir kontrol eder (gerçek ortamda bu süre dakikalar/saatler olabilir).
 public class PriorityEscalationService : BackgroundService
 {
     private readonly IServiceScopeFactory _scopeFactory;
     private readonly ILogger<PriorityEscalationService> _logger;
 
-    // Demo için kısaltılmış eşikler (gerçek kullanımda TimeSpan.FromHours(...) olmalı)
     private static readonly Dictionary<TicketPriority, TimeSpan> Thresholds = new()
     {
         [TicketPriority.Critical] = TimeSpan.FromMinutes(2),
@@ -45,8 +42,6 @@ public class PriorityEscalationService : BackgroundService
 
     private async Task CheckAndEscalateAsync()
     {
-        // BackgroundService singleton olduğu için, scoped olan AppDbContext'i
-        // her çalıştığında yeni bir scope içinde almamız gerekiyor.
         using var scope = _scopeFactory.CreateScope();
         var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
 

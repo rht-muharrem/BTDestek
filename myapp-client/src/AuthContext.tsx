@@ -4,8 +4,8 @@ import { authApi } from './api';
 
 interface AuthContextValue {
   user: AuthUser | null;
-  initializing: boolean; // Windows otomatik girişi denenirken true
-  sessionExpiringSoon: boolean; // JWT süresi dolmasına ~5 dakikadan az kaldığında true
+  initializing: boolean;
+  sessionExpiringSoon: boolean;
   login: (email: string, password: string) => Promise<void>;
   loginWithWindows: () => Promise<boolean>;
   register: (fullName: string, email: string, password: string) => Promise<void>;
@@ -15,14 +15,13 @@ interface AuthContextValue {
 
 const AuthContext = createContext<AuthContextValue | undefined>(undefined);
 
-const WARNING_LEAD_MS = 5 * 60 * 1000; // sona ermeden 5 dk önce uyar
+const WARNING_LEAD_MS = 5 * 60 * 1000;
 
 function loadStoredUser(): AuthUser | null {
   const raw = localStorage.getItem('user');
   return raw ? (JSON.parse(raw) as AuthUser) : null;
 }
 
-// JWT'nin ikinci parçasını (payload) çözüp "exp" (unix saniye) alanını döner.
 function decodeJwtExpiryMs(token: string): number | null {
   try {
     const payloadPart = token.split('.')[1];
@@ -67,7 +66,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setSessionExpiringSoon(false);
 
     if (msUntilExpiry <= 0) {
-      // Token zaten süresi dolmuş (örn. sekme uzun süre kapalı kalmış)
       logout();
       return;
     }
@@ -90,8 +88,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     scheduleSessionTimers(token);
   }
 
-  // Uygulama ilk açıldığında: kayıtlı bir token varsa süresi için zamanlayıcı kur;
-  // yoksa Windows/AD kimliğiyle sessiz giriş dene.
   useEffect(() => {
     const storedToken = localStorage.getItem('token');
     if (user && storedToken) {
@@ -105,7 +101,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     });
 
     return () => clearSessionTimers();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   async function login(email: string, password: string) {
@@ -113,7 +108,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     persist(token, user);
   }
 
-  // "Windows ile Giriş Yap" butonu için — kullanıcı manuel olarak tekrar dener.
   async function loginWithWindows(): Promise<boolean> {
     const result = await authApi.windowsLogin();
     if (result) {

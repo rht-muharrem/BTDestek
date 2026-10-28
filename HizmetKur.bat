@@ -2,8 +2,6 @@
 chcp 65001 >nul
 title Destek Masasi - Windows Hizmeti Kurulumu
 
-REM Bu script uygulamayi Windows hizmeti olarak kurar.
-REM YONETICI olarak calistirilmalidir (sag tik -> Yonetici olarak calistir).
 
 net session >nul 2>&1
 if errorlevel 1 (
@@ -37,7 +35,6 @@ echo   Konum      : %EXE_PATH%
 echo   Port       : %PORT%
 echo.
 
-REM --- Ayni isimde hizmet varsa once kaldir ---
 sc query %SERVICE_NAME% >nul 2>&1
 if not errorlevel 1 (
     echo [!] Ayni isimde bir hizmet zaten var, kaldiriliyor...
@@ -47,7 +44,6 @@ if not errorlevel 1 (
     timeout /t 2 /nobreak >nul
 )
 
-REM --- Hizmeti olustur ---
 echo [1/4] Hizmet olusturuluyor...
 sc create %SERVICE_NAME% binPath= "\"%EXE_PATH%\"" start= auto DisplayName= "Destek Masasi"
 if errorlevel 1 (
@@ -58,16 +54,13 @@ if errorlevel 1 (
 
 sc description %SERVICE_NAME% "Bilgi Islem destek talep sistemi. Web arayuzu: http://localhost:%PORT%"
 
-REM --- Cokme durumunda otomatik yeniden baslatma ---
 echo [2/4] Otomatik kurtarma ayarlaniyor...
 sc failure %SERVICE_NAME% reset= 86400 actions= restart/5000/restart/10000/restart/30000
 
-REM --- Guvenlik duvari kurali (agdan erisim icin) ---
 echo [3/4] Guvenlik duvari kurali ekleniyor (port %PORT%)...
 netsh advfirewall firewall delete rule name="Destek Masasi (%PORT%)" >nul 2>&1
 netsh advfirewall firewall add rule name="Destek Masasi (%PORT%)" dir=in action=allow protocol=TCP localport=%PORT% >nul
 
-REM --- Hizmeti baslat ---
 echo [4/4] Hizmet baslatiliyor...
 sc start %SERVICE_NAME%
 if errorlevel 1 (

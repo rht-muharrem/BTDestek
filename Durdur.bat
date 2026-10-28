@@ -7,7 +7,7 @@ echo   DESTEK MASASI - Durduruluyor
 echo ==========================================
 echo.
 
-REM 5000 (backend) ve 5173 (frontend) portlarini dinleyen surecleri bul ve kapat
+
 for %%P in (5000 5173) do (
     echo Port %%P kontrol ediliyor...
     for /f "tokens=5" %%A in ('netstat -aon ^| findstr ":%%P" ^| findstr "LISTENING"') do (

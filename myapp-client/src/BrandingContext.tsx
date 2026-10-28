@@ -21,14 +21,12 @@ export function BrandingProvider({ children }: { children: ReactNode }) {
     try {
       const data = await brandingApi.get();
       setBranding(data);
-      // Tarayıcı sekme ikonunu (favicon) da güncelle, logo yüklendiyse
       if (data.logoDataUrl) {
         const link = document.querySelector<HTMLLinkElement>("link[rel='icon']");
         if (link) link.href = data.logoDataUrl;
       }
       document.title = data.companyName;
     } catch {
-      // Backend'e henüz ulaşılamıyorsa varsayılan marka ile devam et — uygulamayı bozma.
     }
   }
 

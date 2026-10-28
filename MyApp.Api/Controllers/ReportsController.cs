@@ -23,8 +23,6 @@ public class ReportsController : ControllerBase
     [HttpGet("summary")]
     public async Task<ActionResult<ReportSummaryResponse>> Summary()
     {
-        // Küçük/orta veri hacminde LINQ-to-Objects tarafında hesaplamak, enum ToString()
-        // gruplama gibi SQL'e çevrilmesi zor ifadelerden kaçınmayı sağlıyor.
         var tickets = await _db.Tickets.ToListAsync();
         var users = await _db.Users.ToListAsync();
         var now = DateTime.UtcNow;

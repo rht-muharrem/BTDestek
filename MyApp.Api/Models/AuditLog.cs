@@ -3,11 +3,11 @@ namespace MyApp.Api.Models;
 public class AuditLog
 {
     public int Id { get; set; }
-    public string Action { get; set; } = string.Empty;       // örn: "TicketCreated", "StatusChanged", "RoleChanged"
-    public string EntityType { get; set; } = string.Empty;    // örn: "Ticket", "User"
+    public string Action { get; set; } = string.Empty;
+    public string EntityType { get; set; } = string.Empty;
     public int? EntityId { get; set; }
     public int PerformedByUserId { get; set; }
     public string PerformedByName { get; set; } = string.Empty;
-    public string Details { get; set; } = string.Empty;       // insan tarafından okunabilir açıklama
+    public string Details { get; set; } = string.Empty;
     public DateTime Timestamp { get; set; } = DateTime.UtcNow;
 }

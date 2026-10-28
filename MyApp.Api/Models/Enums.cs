@@ -10,8 +10,8 @@ public enum TicketStatus
 {
     Open,
     InProgress,
-    Resolved,   // Personel çözdü işaretledi, kullanıcı onayı bekliyor
-    Closed      // Kullanıcı onayladı (veya personel doğrudan kapattı)
+    Resolved,
+    Closed
 }
 
 public enum TicketPriority

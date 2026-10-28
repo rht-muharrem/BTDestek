@@ -1,8 +1,5 @@
-/* ===================================================================
-   DESTEK MASASI — Design tokens
-   =================================================================== */
+
 :root {
-  /* --- Yüzeyler ve metin --- */
   --ink: #151a21;
   --ink-soft: #212832;
   --ink-line: rgba(232, 234, 240, 0.09);
@@ -21,7 +18,6 @@
   --accent-ink: #1b3bb0;
   --accent-soft: #eaeffe;
 
-  /* --- Durum --- */
   --status-open: #c67c1c;
   --status-open-soft: #fbf1e0;
   --status-progress: #2952e3;
@@ -31,13 +27,13 @@
   --status-closed: #69707d;
   --status-closed-soft: #edeff2;
 
-  /* --- Öncelik --- */
+
   --priority-critical: #cf3b3b;
   --priority-high: #c67c1c;
   --priority-medium: #2952e3;
   --priority-low: #69707d;
 
-  /* --- Kategori: her biri kendine özgü, ayırt edici bir renk --- */
+
   --cat-hardware: #2f6fed;
   --cat-hardware-soft: #e4ecfd;
   --cat-software: #8b5cf6;
@@ -51,7 +47,7 @@
   --cat-other: #69707d;
   --cat-other-soft: #eaebee;
 
-  /* --- Tipografi --- */
+
   --font-display: 'Space Grotesk', sans-serif;
   --font-body: 'IBM Plex Sans', sans-serif;
   --font-mono: 'IBM Plex Mono', monospace;
@@ -65,7 +61,7 @@
   --text-xl: 24px;
   --text-2xl: 32px;
 
-  /* --- Boşluk --- */
+
   --space-1: 4px;
   --space-2: 8px;
   --space-3: 12px;
@@ -74,19 +70,19 @@
   --space-6: 30px;
   --space-7: 44px;
 
-  /* --- Layout --- */
+
   --sidebar-w: 236px;
   --radius-sm: 6px;
   --radius: 10px;
   --radius-lg: 14px;
   --radius-pill: 999px;
 
-  /* Yükseklik: sadece 3 kademe — her şeye aynı gölgeyi vermek hiyerarşiyi öldürür */
+
   --shadow-flat: 0 1px 1px rgba(21, 26, 33, 0.03);
   --shadow: 0 1px 2px rgba(21, 26, 33, 0.05), 0 2px 10px rgba(21, 26, 33, 0.035);
   --shadow-hover: 0 4px 14px rgba(21, 26, 33, 0.09), 0 1px 3px rgba(21, 26, 33, 0.05);
 
-  /* --- Hareket --- */
+
   --ease: cubic-bezier(0.22, 1, 0.36, 1);
   --ease-soft: cubic-bezier(0.4, 0, 0.2, 1);
   --dur-fast: 0.16s;
@@ -94,9 +90,7 @@
   --dur-slow: 0.5s;
 }
 
-/* ===================================================================
-   Motion primitives
-   =================================================================== */
+
 @keyframes fadeIn {
   from {
     opacity: 0;
@@ -188,9 +182,7 @@ textarea {
   outline-offset: 2px;
 }
 
-/* ===================================================================
-   Auth pages (login / register)
-   =================================================================== */
+
 .checking-auth {
   color: var(--text-muted);
   font-size: 14px;
@@ -479,9 +471,6 @@ textarea {
   animation: settleIn var(--dur) var(--ease) both;
 }
 
-/* ===================================================================
-   App shell (sidebar + main)
-   =================================================================== */
 .app-shell {
   display: flex;
   min-height: 100vh;
@@ -567,8 +556,6 @@ textarea {
   flex-shrink: 0;
 }
 
-/* Hover'da metni kaydırmak veya ikonu büyütmek, menüde gezinirken
-   öğelerin yerinde durmamasına yol açıyordu — sadece renk değişiyor. */
 .nav-item:hover {
   background: var(--ink-soft);
   color: var(--text-on-ink);
@@ -674,9 +661,7 @@ textarea {
   line-height: 1.5;
 }
 
-/* ===================================================================
-   Toolbar / filters
-   =================================================================== */
+
 .error {
   color: #a12b2b;
   background: #fdecec;
@@ -733,9 +718,6 @@ textarea {
   color: var(--accent-ink);
 }
 
-/* ===================================================================
-   New-ticket form panel
-   =================================================================== */
 .panel {
   background: var(--surface);
   border: 1px solid var(--line);
@@ -745,7 +727,7 @@ textarea {
   margin-bottom: var(--space-5);
 }
 
-/* Panel açılış/kapanış: display yerine max-height + opacity ile yumuşak geçiş */
+
 .panel.collapsible {
   display: block;
   overflow: hidden;
@@ -785,9 +767,6 @@ textarea {
   gap: 14px;
 }
 
-/* ===================================================================
-   Ticket stub card — signature element
-   =================================================================== */
 .ticket-list {
   display: flex;
   flex-direction: column;
@@ -806,8 +785,7 @@ textarea {
   transition: box-shadow var(--dur-fast) var(--ease-soft), border-color var(--dur-fast) var(--ease-soft);
 }
 
-/* Hover'da kartı zıplatmak yerine yalnızca yükseltiyoruz — uzun listelerde
-   her kartın hareket etmesi okumayı zorlaştırıyordu. */
+
 .ticket:hover {
   box-shadow: var(--shadow);
   border-color: var(--line-strong);
@@ -827,8 +805,7 @@ textarea {
   position: relative;
 }
 
-/* Koçan, talebin önceliğini taşır: kritik bir talep listede anında ayırt edilir.
-   Renk hem burada hem içerideki rozette tekrarlanıyor, ikisi birbirini doğruluyor. */
+
 .ticket .stub.stub-Critical {
   background: #6d1f1f;
 }
@@ -862,7 +839,7 @@ textarea {
   font-weight: 700;
 }
 
-/* perforation seam with punch-hole notches */
+
 .ticket .stub::after {
   content: '';
   position: absolute;
@@ -1144,9 +1121,6 @@ textarea {
   }
 }
 
-/* ===================================================================
-   Arama kutusu + kategori etiketi
-   =================================================================== */
 .search-input {
   border: 1px solid var(--line);
   border-radius: 7px;
@@ -1254,9 +1228,6 @@ textarea {
   font-size: 12.5px;
 }
 
-/* ===================================================================
-   Talep detayı: yorumlar + dosya ekleri
-   =================================================================== */
 .ticket-detail {
   margin-top: 14px;
   padding-top: 14px;
@@ -1340,7 +1311,6 @@ textarea {
   word-break: break-word;
 }
 
-/* Köşe yarıçapı konuşma yönünü gösteriyor — balonun "kuyruğu" gibi */
 .comment-bubble.from-user {
   background: var(--surface-sunken);
   border: 1px solid var(--line);
@@ -1393,9 +1363,6 @@ textarea {
   box-shadow: 0 0 0 3px var(--accent-soft);
 }
 
-/* ===================================================================
-   Bildirim zili
-   =================================================================== */
 .sidebar-notification-row {
   padding: 0 8px 14px;
 }
@@ -1522,9 +1489,6 @@ textarea {
   font-family: var(--font-mono);
 }
 
-/* ===================================================================
-   Dashboard: istatistik kartları + çubuk grafikler
-   =================================================================== */
 .stat-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
@@ -1610,16 +1574,14 @@ textarea {
   text-align: right;
 }
 
-/* ===================================================================
-   Tablo (Admin, Dashboard personel tablosu)
-   =================================================================== */
+
 .data-table {
   width: 100%;
   border-collapse: collapse;
   font-size: var(--text-base);
 }
 
-/* Başlıklar all-caps yerine yarı-koyu: kısa etiketlerde all-caps okumayı yavaşlatıyor */
+
 .data-table th {
   text-align: left;
   font-size: var(--text-sm);
@@ -1658,9 +1620,7 @@ textarea {
   color: var(--text-muted);
 }
 
-/* ===================================================================
-   Karanlık Mod
-   =================================================================== */
+
 :root[data-theme='dark'] {
   --ink: #0d1117;
   --ink-soft: #171d26;
@@ -1680,7 +1640,7 @@ textarea {
   --accent-ink: #8aa3ff;
   --accent-soft: #1b2545;
 
-  /* Koyu zeminde okunabilirlik için durum renkleri açık tonlara çekiliyor */
+
   --status-open: #e0a34a;
   --status-open-soft: #33270f;
   --status-progress: #7d9bfb;
@@ -1742,9 +1702,7 @@ textarea {
   color: var(--text-on-ink);
 }
 
-/* ===================================================================
-   Talep şablonları
-   =================================================================== */
+
 .template-row {
   display: flex;
   flex-wrap: wrap;
@@ -1782,9 +1740,7 @@ textarea {
 .template-chip-Access { border-left: 3px solid var(--cat-access); }
 .template-chip-Other { border-left: 3px solid var(--cat-other); }
 
-/* ===================================================================
-   Yıldız puanlama
-   =================================================================== */
+
 .star-rating {
   display: inline-flex;
   align-items: center;
@@ -1821,9 +1777,7 @@ textarea {
   transform: none;
 }
 
-/* Ortak bildirim deseni: düz yüzey + sol kenarda tür rengini taşıyan şerit.
-   Uygulamadaki tüm dikkat çekici paneller (puanlama, AI, toplu işlem, oturum
-   uyarısı) bu tek dili paylaşır — birbirleriyle yarışan gradientler yerine. */
+
 .notice {
   position: relative;
   border: 1px solid var(--line);
@@ -1875,9 +1829,7 @@ textarea {
   color: var(--text);
 }
 
-/* ===================================================================
-   Hazır yanıtlar (canned responses)
-   =================================================================== */
+
 .canned-response-row {
   display: flex;
   flex-wrap: wrap;
@@ -1901,9 +1853,7 @@ textarea {
   color: var(--accent);
 }
 
-/* ===================================================================
-   Sürükle-bırak dosya yükleme alanı
-   =================================================================== */
+
 .dropzone {
   border: 1px dashed var(--line);
   border-radius: 8px;
@@ -1916,9 +1866,6 @@ textarea {
   background: var(--accent-soft);
 }
 
-/* ===================================================================
-   SSS (Yardım) sayfası
-   =================================================================== */
 .faq-list {
   display: flex;
   flex-direction: column;
@@ -1968,9 +1915,7 @@ textarea {
   animation: settleIn var(--dur) var(--ease) both;
 }
 
-/* ===================================================================
-   Dashboard: mini zaman-serisi grafiği + aksiyon butonları
-   =================================================================== */
+
 .dashboard-actions {
   display: flex;
   gap: 8px;
@@ -2008,9 +1953,7 @@ textarea {
   font-family: var(--font-mono);
 }
 
-/* ===================================================================
-   Yazdırma (Dashboard -> PDF)
-   =================================================================== */
+
 @media print {
   .sidebar,
   .mobile-topbar,
@@ -2027,9 +1970,7 @@ textarea {
   }
 }
 
-/* ===================================================================
-   Toplu işlem, seçim kutusu, birleştirme paneli
-   =================================================================== */
+
 .ticket-select {
   display: flex;
   align-items: center;
@@ -2109,9 +2050,6 @@ textarea {
   margin-top: 14px;
 }
 
-/* ===================================================================
-   SLA rozeti
-   =================================================================== */
 .sla-badge {
   font-size: var(--text-2xs);
   font-family: var(--font-mono);
@@ -2123,8 +2061,7 @@ textarea {
   white-space: nowrap;
 }
 
-/* Aciliyet renk yoğunluğuyla anlatılıyor — sürekli yanıp sönen bir rozet,
-   ekranda birden fazla talep varken okumayı zorlaştırıyordu. */
+
 .sla-badge.urgent {
   background: var(--status-open-soft);
   color: var(--status-open);
@@ -2135,9 +2072,6 @@ textarea {
   color: #fff;
 }
 
-/* ===================================================================
-   Oturum zaman aşımı uyarısı
-   =================================================================== */
 .session-warning-banner {
   display: flex;
   align-items: center;
@@ -2164,9 +2098,7 @@ textarea {
   gap: var(--space-2);
 }
 
-/* ===================================================================
-   Gerçek zamanlı: yeni talep vurgusu, cihaz rozeti
-   =================================================================== */
+
 .ticket.flash-new {
   animation: settleIn var(--dur-slow) var(--ease) both, newTicketGlow 2.5s ease-out;
 }
@@ -2200,9 +2132,6 @@ textarea {
   100% { box-shadow: none; }
 }
 
-/* ===================================================================
-   Envanter (Asset) kartları
-   =================================================================== */
 .asset-card {
   background: var(--surface);
   border: 1px solid var(--line);
@@ -2264,9 +2193,6 @@ textarea {
   font-size: var(--text-base);
 }
 
-/* ===================================================================
-   AI Öneri Paneli
-   =================================================================== */
 .ai-panel {
   background: var(--accent-soft);
   border: 1px solid var(--line);
@@ -2357,13 +2283,7 @@ textarea {
   line-height: 1.5;
 }
 
-/* ===================================================================
-   ZENGİN HAREKET KATMANI
-   Uygulamaya canlılık katan animasyonlar. prefers-reduced-motion
-   açıksa hepsi otomatik devre dışı kalır (dosyanın başındaki kural).
-   =================================================================== */
 
-/* --- Yeni keyframe'ler --- */
 @keyframes floatUp {
   from { opacity: 0; transform: translateY(18px) scale(0.97); }
   to   { opacity: 1; transform: translateY(0) scale(1); }
@@ -2400,7 +2320,6 @@ textarea {
   50%      { background-position: 100% 50%; }
 }
 
-/* --- Sayfa girişi: her sayfa yumuşakça yükselerek gelir --- */
 .main > * {
   animation: floatUp var(--dur-slow) var(--ease) both;
 }
@@ -2409,7 +2328,6 @@ textarea {
 .main > *:nth-child(3) { animation-delay: 0.12s; }
 .main > *:nth-child(n + 4) { animation-delay: 0.16s; }
 
-/* --- Sidebar ve menü --- */
 .sidebar {
   animation: slideInLeft var(--dur-slow) var(--ease) both;
 }
@@ -2435,7 +2353,6 @@ textarea {
   box-shadow: inset 3px 0 0 var(--accent), 0 2px 12px rgba(41, 82, 227, 0.18);
 }
 
-/* --- Talep kartları: kademeli giriş + belirgin hover --- */
 .ticket {
   animation: floatUp var(--dur-slow) var(--ease) both;
   transition: box-shadow var(--dur) var(--ease), transform var(--dur) var(--ease),
@@ -2456,7 +2373,7 @@ textarea {
   border-color: var(--accent);
 }
 
-/* Koçan hover'da hafifçe parlar */
+
 .ticket .stub {
   transition: filter var(--dur) var(--ease);
 }
@@ -2464,12 +2381,12 @@ textarea {
   filter: brightness(1.25);
 }
 
-/* --- Durum rozeti: değiştiğinde belirgin pop --- */
+
 .status-tag {
   animation: popIn 0.45s var(--ease) both;
 }
 
-/* --- SLA: süresi geçmiş talepler nabız atar (gerçekten acil olan tek şey) --- */
+
 .sla-badge.overdue {
   animation: softPulse 1.8s ease-in-out infinite;
 }
@@ -2481,7 +2398,7 @@ textarea {
   transform: scale(1.06);
 }
 
-/* --- Butonlar: canlı hover --- */
+
 .btn {
   transition: background var(--dur-fast) var(--ease-soft), border-color var(--dur-fast) var(--ease-soft),
     color var(--dur-fast) var(--ease-soft), transform var(--dur-fast) var(--ease),
@@ -2503,7 +2420,6 @@ textarea {
   color: var(--accent);
 }
 
-/* --- Bildirim/AI/puanlama panelleri: yumuşakça akan gradient --- */
 .ai-panel,
 .rating-banner:not(.rated) {
   background: linear-gradient(120deg, var(--accent-soft), var(--surface), var(--accent-soft));
@@ -2516,7 +2432,6 @@ textarea {
   box-shadow: 0 3px 16px rgba(41, 82, 227, 0.16);
 }
 
-/* --- Dashboard: kartlar sırayla gelir, sayılar öne çıkar --- */
 .stat-card {
   animation: floatUp var(--dur-slow) var(--ease) both;
   transition: transform var(--dur) var(--ease), box-shadow var(--dur) var(--ease),
@@ -2538,7 +2453,6 @@ textarea {
   border-color: var(--accent);
 }
 
-/* --- Grafik çubukları soldan dolarak büyür --- */
 .bar-fill {
   transform-origin: left center;
   animation: growBar 0.9s var(--ease) both;
@@ -2555,7 +2469,6 @@ textarea {
   transform: scaleY(1.04);
 }
 
-/* --- Tablo satırları --- */
 .data-table tbody tr {
   transition: background var(--dur-fast) var(--ease-soft);
 }
@@ -2564,7 +2477,6 @@ textarea {
   background: var(--surface-sunken);
 }
 
-/* --- Envanter kartları --- */
 .asset-card {
   animation: floatUp var(--dur-slow) var(--ease) both;
   transition: transform var(--dur) var(--ease), box-shadow var(--dur) var(--ease),
@@ -2577,7 +2489,6 @@ textarea {
   border-color: var(--accent);
 }
 
-/* --- SSS kartları --- */
 .faq-item {
   transition: transform var(--dur) var(--ease), box-shadow var(--dur) var(--ease),
     border-color var(--dur) var(--ease);
@@ -2588,7 +2499,6 @@ textarea {
   border-color: var(--accent);
 }
 
-/* --- Rozetler ve etiketler hover'da canlanır --- */
 .category-chip,
 .role-chip,
 .attachment-chip,
@@ -2606,7 +2516,6 @@ textarea {
   transform: translateY(-2px);
 }
 
-/* --- Yıldız puanlama: daha oyuncu --- */
 .star {
   transition: transform 0.2s var(--ease), color var(--dur-fast) var(--ease-soft);
 }
@@ -2619,12 +2528,10 @@ textarea {
   animation: popIn 0.4s var(--ease) both;
 }
 
-/* --- Yorum balonları sırayla belirir --- */
 .comment-bubble {
   animation: floatUp var(--dur) var(--ease) both;
 }
 
-/* --- Yükleniyor: parlayan iskelet efekti --- */
 .skeleton {
   background: linear-gradient(
     90deg,
@@ -2642,7 +2549,6 @@ textarea {
   margin-bottom: var(--space-3);
 }
 
-/* --- Bildirim zili: yeni bildirimde sallanır --- */
 @keyframes bellRing {
   0%, 100% { transform: rotate(0); }
   20% { transform: rotate(-13deg); }
@@ -2659,13 +2565,11 @@ textarea {
   animation: popIn 0.4s var(--ease) both;
 }
 
-/* --- Gerçek zamanlı yeni talep: dikkat çeken vurgu --- */
 .ticket.flash-new {
   animation: floatUp var(--dur) var(--ease) both, softPulse 2.4s ease-out 2;
   border-color: var(--priority-critical);
 }
 
-/* --- Marka logosu hover --- */
 .sidebar .brand .mark,
 .brand-logo {
   transition: transform var(--dur) var(--ease);
@@ -2676,11 +2580,6 @@ textarea {
   transform: rotate(-6deg) scale(1.08);
 }
 
-/* ===================================================================
-   GÖRSEL ZENGİNLİK: gradient avatarlar, derinlik, doku
-   =================================================================== */
-
-/* --- Gradient avatarlar --- */
 .gradient-avatar {
   display: inline-flex;
   align-items: center;
@@ -2702,7 +2601,6 @@ textarea {
   box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.24), 0 3px 10px rgba(21, 26, 33, 0.28);
 }
 
-/* Kart meta satırındaki küçük avatarlar metinle hizalansın */
 .ticket .meta span {
   display: inline-flex;
   align-items: center;
@@ -2719,18 +2617,15 @@ textarea {
   align-items: center;
 }
 
-/* --- Sidebar derinliği: düz koyu yerine ince bir renk geçişi --- */
 .sidebar {
   background:
     radial-gradient(120% 60% at 0% 0%, rgba(41, 82, 227, 0.16), transparent 60%),
     linear-gradient(180deg, var(--ink-soft) 0%, var(--ink) 55%, var(--ink) 100%);
   border-right: 1px solid rgba(0, 0, 0, 0.35);
-  /* Buraya 'position: relative' YAZMA — yukarıdaki 'position: sticky' kuralını ezer
-     ve sidebar sayfa kaydırılınca yukarıda kalır. sticky zaten ::after için
-     konumlandırma bağlamı oluşturuyor. */
+
 }
 
-/* Sidebar'ın sağ kenarında ince bir ışık çizgisi — panelin kalkık durduğunu hissettirir */
+
 .sidebar::after {
   content: '';
   position: absolute;
@@ -2745,7 +2640,6 @@ textarea {
   z-index: 1;
 }
 
-/* --- Giriş ekranı: koyu panele derinlik + ince ızgara dokusu --- */
 .auth-visual {
   background:
     radial-gradient(90% 55% at 15% 0%, rgba(41, 82, 227, 0.28), transparent 62%),
@@ -2753,7 +2647,6 @@ textarea {
     linear-gradient(160deg, var(--ink-soft), var(--ink) 60%);
 }
 
-/* Işık huzmesinin üstünde ince ızgara: kağıt/fiş dokusunu hatırlatır */
 .auth-visual::before {
   content: '';
   position: absolute;
@@ -2772,7 +2665,6 @@ textarea {
   z-index: 1;
 }
 
-/* --- Ana çalışma alanına çok hafif bir doku --- */
 body {
   background-image: radial-gradient(rgba(21, 26, 33, 0.032) 1px, transparent 1px);
   background-size: 22px 22px;
@@ -2783,7 +2675,6 @@ body {
   background-image: radial-gradient(rgba(255, 255, 255, 0.028) 1px, transparent 1px);
 }
 
-/* --- Mobil üst çubuğa da aynı derinlik --- */
 .mobile-topbar {
   background:
     radial-gradient(100% 180% at 0% 0%, rgba(41, 82, 227, 0.2), transparent 60%),

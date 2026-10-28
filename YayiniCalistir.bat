@@ -2,9 +2,6 @@
 chcp 65001 >nul
 title Destek Masasi - Yayin Surumu
 
-REM Bu script, YayinPaketiHazirla.bat ile olusturulan 'yayin' klasorundeki
-REM uygulamayi calistirir. IIS'e gerek yoktur — uygulama kendi web sunucusunu icerir.
-
 cd /d "%~dp0"
 
 if not exist "yayin\MyApp.Api.exe" (
@@ -15,10 +12,8 @@ if not exist "yayin\MyApp.Api.exe" (
     exit /b 1
 )
 
-REM Uretim ayarlarini kullan (appsettings.Production.json)
 set ASPNETCORE_ENVIRONMENT=Production
 
-REM 0.0.0.0 = hem bu bilgisayardan hem agdaki diger bilgisayarlardan erisilebilir
 set ASPNETCORE_URLS=http://0.0.0.0:8080
 
 echo ==========================================

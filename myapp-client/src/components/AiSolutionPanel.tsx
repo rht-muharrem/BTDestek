@@ -28,7 +28,7 @@ export function AiSolutionPanel({ title, description }: Props) {
       } finally {
         setLoading(false);
       }
-    }, 700); // kullanıcı yazmayı bıraktıktan 700ms sonra iste
+    }, 700);
 
     return () => {
       if (debounceRef.current) clearTimeout(debounceRef.current);

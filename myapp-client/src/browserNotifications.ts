@@ -25,17 +25,15 @@ export async function requestNotificationPermission(): Promise<boolean> {
   return result === 'granted';
 }
 
-// Sadece kullanıcı bildirimleri açtıysa, izin verildiyse VE sekme aktif değilse gösterir —
-// sekme zaten açıkken uygulama içi bildirim yeterli, tekrar tekrar masaüstü bildirimi rahatsız edici olur.
 export function showDesktopNotification(title: string, body: string, onClick?: () => void) {
   if (!getNotificationPreference()) return;
   if (!isNotificationSupported() || Notification.permission !== 'granted') return;
-  if (!document.hidden) return; // sekme zaten görünürken gösterme
+  if (!document.hidden) return;
 
   const notification = new Notification(title, {
     body,
     icon: '/vite.svg',
-    tag: 'destek-masasi', // aynı anda birden fazla bildirim yığılmasın
+    tag: 'destek-masasi',
   });
 
   notification.onclick = () => {

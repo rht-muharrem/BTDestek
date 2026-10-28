@@ -4,11 +4,6 @@ using Microsoft.AspNetCore.SignalR;
 
 namespace MyApp.Api.Hubs;
 
-// Gerçek zamanlı kanal: yeni talep, yeni yorum, durum güncellemesi, bildirim.
-// Gruplar:
-//  - "staff"          -> tüm IT personeli (yeni talep uyarıları için)
-//  - "user-{id}"       -> belirli bir kullanıcı (kişisel bildirimler için)
-//  - "ticket-{id}"     -> o an bir talebin detayını açık tutan herkes (canlı yorum/güncelleme için)
 [Authorize]
 public class TicketHub : Hub
 {
@@ -25,7 +20,6 @@ public class TicketHub : Hub
         await base.OnConnectedAsync();
     }
 
-    // İstemci bir talebin detayını açtığında çağırır -> o talebe özel canlı güncellemeleri almaya başlar.
     public async Task JoinTicket(int ticketId)
     {
         await Groups.AddToGroupAsync(Context.ConnectionId, $"ticket-{ticketId}");

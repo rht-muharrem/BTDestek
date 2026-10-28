@@ -7,9 +7,6 @@ public static class DbSeeder
 {
     public static void Seed(AppDbContext db)
     {
-        // Migration'a geçildi: veritabanı yoksa oluşturur, varsa bekleyen migration'ları uygular.
-        // Eski EnsureCreated() ile oluşturulmuş bir veritabanın varsa, migration'a geçmeden önce
-        // o veritabanını silmen gerekir (README'deki "Migration'a Geçiş" bölümüne bak).
         db.Database.Migrate();
 
         if (!db.Users.Any(u => u.Role == UserRole.ITStaff))

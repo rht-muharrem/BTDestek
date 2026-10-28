@@ -54,30 +54,21 @@ export function TicketDetail({ ticketId, ticketTitle, ticketDescription, onComme
 
   useEffect(() => {
     load();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [ticketId]);
 
-  // Gerçek zamanlı: bu talebi açık tutan herkes, biri yorum yazdığı anda
-  // sayfayı yenilemeden görür — "Muharrem yeni yorum yaptı" anlık gelir.
   useEffect(() => {
     if (!connection) return;
 
     connection.invoke('JoinTicket', ticketId).catch(() => {});
 
     function handleNewComment(comment: TicketComment) {
-      if (comment.ticketId !== ticketId) return;
+        if (comment.ticketId !== ticketId) return;
 
-      // StrictMode geliştirme modunda setState updater'ını bilerek 2 kez çalıştırır —
-      // bu yüzden bildirim/sayaç gibi yan etkileri updater'ın DIŞINDA, ref tabanlı bir
-      // "bu yorumu zaten işledim mi" kontrolüyle bir kez tetikliyoruz.
       if (handledCommentIdsRef.current.has(comment.id)) return;
       handledCommentIdsRef.current.add(comment.id);
 
       setComments((prev) => (prev.some((c) => c.id === comment.id) ? prev : [...prev, comment]));
       onCommentAdded();
-      // Not: Masaüstü bildirimi burada GÖNDERİLMİYOR — aynı yorum için zaten
-      // NotificationBell.tsx (NewNotification olayı) üzerinden bildirim gidiyor.
-      // İkisi birden çalışırsa aynı yorum için 2 ayrı masaüstü bildirimi çıkıyordu.
       setLiveFlashId(comment.id);
       setTimeout(() => setLiveFlashId(null), 2000);
     }
@@ -88,7 +79,6 @@ export function TicketDetail({ ticketId, ticketTitle, ticketDescription, onComme
       connection.invoke('LeaveTicket', ticketId).catch(() => {});
       connection.off('NewComment', handleNewComment);
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [connection, ticketId]);
 
   async function load() {
@@ -105,8 +95,6 @@ export function TicketDetail({ ticketId, ticketTitle, ticketDescription, onComme
     setSending(true);
     try {
       const created = await ticketsApi.addComment(ticketId, message.trim());
-      // SignalR "yankısı" bazen bu HTTP yanıtından ÖNCE gelebilir (yarış durumu) —
-      // o yüzden zaten işlenmişse (ref'te varsa) burada tekrar eklemiyoruz/saymıyoruz.
       if (!handledCommentIdsRef.current.has(created.id)) {
         handledCommentIdsRef.current.add(created.id);
         setComments((prev) => (prev.some((c) => c.id === created.id) ? prev : [...prev, created]));
@@ -152,7 +140,7 @@ export function TicketDetail({ ticketId, ticketTitle, ticketDescription, onComme
 
   return (
     <div className="ticket-detail">
-      {/* AI Destekli Analiz - sadece IT personeli görür */}
+      {}
       {isStaff && <AiSuggestionPanel ticketTitle={ticketTitle} ticketDescription={ticketDescription} />}
 
       {/* Dosya Ekleri */}
@@ -196,7 +184,7 @@ export function TicketDetail({ ticketId, ticketTitle, ticketDescription, onComme
         )}
       </div>
 
-      {/* Yorumlar */}
+      {}
       <div className="detail-section">
         <p className="detail-heading">Yorumlar</p>
         {loading ? (

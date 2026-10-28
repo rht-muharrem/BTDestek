@@ -3,7 +3,7 @@ namespace MyApp.Api.Models;
 public class Asset
 {
     public int Id { get; set; }
-    public string AssetTag { get; set; } = string.Empty; // örn: "PC-000142"
+    public string AssetTag { get; set; } = string.Empty;
     public AssetType Type { get; set; } = AssetType.Computer;
 
     public string? Brand { get; set; }
@@ -20,7 +20,7 @@ public class Asset
     public string? Location { get; set; }
     public string? Notes { get; set; }
 
-    public bool IsRetired { get; set; } // hurdaya ayrıldı / kullanımdan kaldırıldı
+    public bool IsRetired { get; set; }
 
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     public DateTime? UpdatedAt { get; set; }

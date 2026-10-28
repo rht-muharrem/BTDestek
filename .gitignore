@@ -1,18 +1,18 @@
-# .NET
+
 MyApp.Api/bin/
 MyApp.Api/obj/
 
-# React derlemesi backend'e kopyalanıyor, kaynak kodda tutulmaz
+
 MyApp.Api/wwwroot/
 
-# Yayınlama çıktısı
+
 yayin/
 
-# Node
+
 myapp-client/node_modules/
 myapp-client/dist/
 
-# IDE
+
 .vs/
 .vscode/
 *.user

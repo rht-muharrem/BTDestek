@@ -15,7 +15,7 @@ export function BrandSettingsPanel() {
   const { branding, refreshBranding } = useBranding();
   const [companyName, setCompanyName] = useState(branding.companyName);
   const [preview, setPreview] = useState<string | null>(branding.logoDataUrl);
-  const [pendingBase64, setPendingBase64] = useState<string | null | undefined>(undefined); // undefined = değişmedi
+  const [pendingBase64, setPendingBase64] = useState<string | null | undefined>(undefined);
   const [pendingContentType, setPendingContentType] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);

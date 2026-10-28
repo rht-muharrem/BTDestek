@@ -21,9 +21,6 @@ public class AiController : ControllerBase
         _ai = ai;
     }
 
-    // Kullanıcı "Yeni Talep" formunu doldururken çağrılır -> kategori/öncelik/ekip önerisi
-    // ve geçmişteki benzer talepleri döner. Talep henüz oluşturulmamış olabilir, sadece
-    // yazarken canlı öneri için kullanılır.
     [HttpPost("suggest")]
     public async Task<ActionResult<SuggestTicketResponse>> Suggest(SuggestTicketRequest request)
     {
@@ -32,7 +29,7 @@ public class AiController : ControllerBase
 
         var recentTickets = await _db.Tickets
             .OrderByDescending(t => t.CreatedAt)
-            .Take(200) // performans için son 200 talep ile sınırlı
+            .Take(200)
             .ToListAsync();
 
         var result = await _ai.SuggestAsync(request.Title, request.Description, recentTickets);
@@ -54,8 +51,6 @@ public class AiController : ControllerBase
         ));
     }
 
-    // Kullanıcı "Yeni Talep" formunu doldururken çağrılır -> talep açmadan önce kendi
-    // deneyebileceği basit çözüm adımlarını önerir (kategori/öncelik göstermez).
     [HttpPost("suggest-solution")]
     public async Task<ActionResult<SuggestSolutionResponse>> SuggestSolution(SuggestTicketRequest request)
     {

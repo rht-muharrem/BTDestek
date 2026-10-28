@@ -9,7 +9,6 @@ echo.
 
 cd /d "%~dp0"
 
-REM --- Gereksinim kontrolu ---
 where dotnet >nul 2>nul
 if errorlevel 1 (
     echo [HATA] .NET SDK bulunamadi.
@@ -23,7 +22,6 @@ if errorlevel 1 (
     exit /b 1
 )
 
-REM --- 1) React'i derle ---
 echo [1/3] Frontend derleniyor...
 cd myapp-client
 if not exist "node_modules" (
@@ -39,13 +37,11 @@ if errorlevel 1 (
 )
 cd ..
 
-REM --- 2) React ciktisini backend'in wwwroot klasorune kopyala ---
 echo [2/3] Frontend ciktisi backend'e kopyalaniyor...
 if exist "MyApp.Api\wwwroot" rmdir /s /q "MyApp.Api\wwwroot"
 mkdir "MyApp.Api\wwwroot"
 xcopy /E /I /Y /Q "myapp-client\dist\*" "MyApp.Api\wwwroot\" >nul
 
-REM --- 3) Backend'i yayinla ---
 echo [3/3] Backend yayinlaniyor...
 cd MyApp.Api
 call dotnet publish -c Release -o "..\yayin"
@@ -57,7 +53,6 @@ if errorlevel 1 (
 )
 cd ..
 
-REM --- Hizmet kurulum scriptlerini yayin klasorune kopyala ---
 copy /Y "HizmetKur.bat" "yayin\" >nul
 copy /Y "HizmetKaldir.bat" "yayin\" >nul
 

@@ -18,7 +18,6 @@ public class AuditController : ControllerBase
         _db = db;
     }
 
-    // GET /api/audit?entityType=Ticket&action=StatusChanged&search=...
     [HttpGet]
     public async Task<ActionResult<IEnumerable<AuditLogResponse>>> GetAll(
         [FromQuery] string? entityType,
@@ -41,7 +40,7 @@ public class AuditController : ControllerBase
 
         var logs = await query
             .OrderByDescending(a => a.Timestamp)
-            .Take(500) // bellek/performans için son 500 kayıt
+            .Take(500)
             .Select(a => new AuditLogResponse(a.Id, a.Action, a.EntityType, a.EntityId, a.PerformedByName, a.Details, a.Timestamp))
             .ToListAsync();
 

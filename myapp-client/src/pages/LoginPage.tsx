@@ -14,7 +14,6 @@ export function LoginPage() {
   const { branding } = useBranding();
   const navigate = useNavigate();
 
-  // Windows/AD kimliğiyle otomatik giriş denemesi sürüyor -> kısa bir bekleme ekranı göster
   if (initializing) {
     return (
       <div className="auth-panel" style={{ minHeight: '100vh' }}>
@@ -23,7 +22,6 @@ export function LoginPage() {
     );
   }
 
-  // Otomatik giriş başarılı oldu -> formu göstermeden yönlendir
   if (user) {
     return <Navigate to="/tickets" replace />;
   }
@@ -59,7 +57,7 @@ export function LoginPage() {
 
   return (
     <div className="auth-shell">
-      {/* Sol görsel panel */}
+      {}
       <div className="auth-visual">
         <div className="brand">
           {branding.logoDataUrl ? (
@@ -97,7 +95,7 @@ export function LoginPage() {
         </div>
       </div>
 
-      {/* Sağ form paneli */}
+      {}
       <div className="auth-panel">
         <div className="auth-card">
           <p className="eyebrow">Hoş geldin</p>

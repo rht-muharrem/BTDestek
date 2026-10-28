@@ -3,7 +3,7 @@ import { useAuth } from '../AuthContext';
 
 export function ProtectedRoute({ children }: { children: React.ReactNode }) {
   const { user, initializing } = useAuth();
-  if (initializing) return null; // Windows kimlik doğrulaması sürüyor
+  if (initializing) return null;
   if (!user) return <Navigate to="/login" replace />;
   return <>{children}</>;
 }

@@ -22,7 +22,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <!-- SignalR (gerçek zamanlı bildirim/güncelleme) ASP.NET Core paylaşılan framework'üyle birlikte gelir, ayrı paket gerekmez -->
   </ItemGroup>
 
 </Project>

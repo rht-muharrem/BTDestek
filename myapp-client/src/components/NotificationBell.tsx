@@ -25,13 +25,10 @@ export function NotificationBell() {
 
   useEffect(() => {
     load();
-    // SignalR bağlıyken sık polling'e gerek yok ama yedek olarak 60 saniyede bir tazeliyoruz
     const interval = setInterval(load, 60000);
     return () => clearInterval(interval);
   }, []);
 
-  // Gerçek zamanlı: backend bir bildirim ürettiği anda burada canlı yakalanır,
-  // sayfa yenilenmeden veya polling beklemeden zil güncellenir.
   useEffect(() => {
     if (!connection) return;
 
@@ -66,7 +63,6 @@ export function NotificationBell() {
       const data = await notificationsApi.getAll();
       setNotifications(data);
     } catch {
-      // sessizce yoksay
     }
   }
 
@@ -80,12 +76,11 @@ export function NotificationBell() {
   }
 
   async function handleItemClick(n: AppNotification) {
-    if (n.isRead || n.id < 0) return; // negatif id = henüz backend'den senkronize olmamış canlı bildirim
+    if (n.isRead || n.id < 0) return;
     try {
       await notificationsApi.markRead(n.id);
       setNotifications((prev) => prev.map((x) => (x.id === n.id ? { ...x, isRead: true } : x)));
     } catch {
-      // sessizce yoksay
     }
   }
 

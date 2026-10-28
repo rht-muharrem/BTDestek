@@ -24,7 +24,6 @@ public class AuthController : ControllerBase
         _adService = adService;
     }
 
-    // Windows/Active Directory ile otomatik giriş.
     [HttpPost("windows-login")]
     [Authorize(AuthenticationSchemes = NegotiateDefaults.AuthenticationScheme)]
     public async Task<ActionResult<AuthResponse>> WindowsLogin()
@@ -53,8 +52,6 @@ public class AuthController : ControllerBase
             _db.Users.Add(user);
         }
 
-        // Her girişte AD bilgilerini tazele (departman/unvan/yönetici değişmiş olabilir).
-        // Domain dışı bir ortamdaysa bu adım sessizce atlanır, giriş akışını bozmaz.
         _adService.EnrichFromActiveDirectory(user, windowsUsername);
 
         await _db.SaveChangesAsync();
@@ -63,7 +60,6 @@ public class AuthController : ControllerBase
         return Ok(new AuthResponse(token, user.Id, user.FullName, user.Email, user.Role.ToString()));
     }
 
-    // Normal kullanıcı kaydı -> her zaman "Requester" rolüyle oluşturulur
     [HttpPost("register")]
     public async Task<ActionResult<AuthResponse>> Register(RegisterRequest request)
     {
@@ -89,7 +85,6 @@ public class AuthController : ControllerBase
         return Ok(new AuthResponse(token, user.Id, user.FullName, user.Email, user.Role.ToString()));
     }
 
-    // Yeni bilgi işlem personeli ekleme -> sadece mevcut bir IT personeli yapabilir
     [HttpPost("register-staff")]
     [Authorize(Roles = "ITStaff")]
     public async Task<ActionResult<AuthResponse>> RegisterStaff(RegisterStaffRequest request)

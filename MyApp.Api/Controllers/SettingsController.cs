@@ -18,8 +18,6 @@ public class SettingsController : ControllerBase
         _db = db;
     }
 
-    // Login ekranı bile bu bilgiyi göstermesi gerektiği için (henüz giriş yapılmamışken)
-    // bu endpoint kimlik doğrulaması gerektirmiyor.
     [HttpGet("branding")]
     [AllowAnonymous]
     public async Task<ActionResult<BrandSettingsResponse>> GetBranding()
@@ -42,7 +40,6 @@ public class SettingsController : ControllerBase
         if (string.IsNullOrWhiteSpace(request.CompanyName))
             return BadRequest("Şirket adı boş olamaz.");
 
-        // Logo yaklaşık 2MB'ı geçmesin — base64 olarak ~%33 daha büyük saklanır, veritabanını şişirmesin diye.
         if (request.LogoBase64 is { Length: > 2_800_000 })
             return BadRequest("Logo çok büyük (maksimum ~2MB).");
 
@@ -55,7 +52,6 @@ public class SettingsController : ControllerBase
 
         settings.CompanyName = request.CompanyName.Trim();
 
-        // LogoBase64 null gönderilirse mevcut logo korunur; boş string gönderilirse logo kaldırılır.
         if (request.LogoBase64 is not null)
         {
             settings.LogoDataBase64 = request.LogoBase64.Length == 0 ? null : request.LogoBase64;

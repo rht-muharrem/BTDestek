@@ -36,18 +36,18 @@ export function RealtimeProvider({ children }: { children: ReactNode }) {
     connection
       .start()
       .then(() => setConnected(true))
-      .catch(() => setConnected(false)); // Sunucu kapalıysa sessizce başarısız ol, uygulama normal çalışmaya devam etsin
+      .catch(() => setConnected(false));
 
     connection.onreconnected(() => setConnected(true));
     connection.onclose(() => setConnected(false));
 
     connectionRef.current = connection;
-    forceRender((n) => n + 1); // Provider tekrar render olsun ki connection tüketicilere ulaşsın
+    forceRender((n) => n + 1);
 
     return () => {
       connection.stop();
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+  
   }, [user?.userId]);
 
   return (

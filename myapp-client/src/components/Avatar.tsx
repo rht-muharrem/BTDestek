@@ -4,9 +4,6 @@ interface Props {
   title?: string;
 }
 
-// Her ismi kendine özgü ama her seferinde AYNI renge eşler — böylece
-// "Muharrem" her yerde aynı moru, "Ayşe" aynı turkuazı alır ve kullanıcılar
-// listede rengi tanıyarak birbirlerini hızlıca ayırt eder.
 const PALETTES: [string, string][] = [
   ['#5b7cf7', '#8b5cf6'],
   ['#0ea5a4', '#22c55e'],
@@ -24,7 +21,7 @@ function hashName(name: string): number {
   let hash = 0;
   for (let i = 0; i < name.length; i++) {
     hash = (hash << 5) - hash + name.charCodeAt(i);
-    hash |= 0; // 32-bit tamsayıya sabitle
+    hash |= 0;
   }
   return Math.abs(hash);
 }
@@ -33,7 +30,6 @@ function getInitials(name: string): string {
   const parts = name.trim().split(/\s+/).filter(Boolean);
   if (parts.length === 0) return '?';
   if (parts.length === 1) return parts[0].charAt(0).toLocaleUpperCase('tr-TR');
-  // İlk ve son kelimenin baş harfi: "Muharrem RAHAT" -> "MR"
   return (
     parts[0].charAt(0).toLocaleUpperCase('tr-TR') +
     parts[parts.length - 1].charAt(0).toLocaleUpperCase('tr-TR')

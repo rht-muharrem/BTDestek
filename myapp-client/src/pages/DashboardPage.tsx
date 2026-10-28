@@ -181,7 +181,7 @@ export function DashboardPage() {
             </div>
           </div>
 
-          {/* Son 30 gün - açılan talep sayısı */}
+          {}
           <div className="panel" style={{ marginTop: 24 }}>
             <p className="panel-title">Son 30 Günde Açılan Talepler</p>
             <div className="mini-chart">
@@ -197,7 +197,7 @@ export function DashboardPage() {
             </div>
           </div>
 
-          {/* SLA aşan talepler */}
+          {}
           {data.overdueTickets.length > 0 && (
             <div className="panel" style={{ marginTop: 24 }}>
               <p className="panel-title">SLA Süresini Aşan Talepler</p>

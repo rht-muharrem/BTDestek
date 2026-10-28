@@ -1,6 +1,5 @@
 import { TicketCategory, TicketPriority } from './types';
 
-// IT personeli için tek tıkla eklenebilecek hazır yanıtlar
 export const CANNED_RESPONSES: string[] = [
   'Bilgisayarınızı yeniden başlatmayı denediniz mi?',
   'Sorunu inceliyoruz, en kısa sürede dönüş yapacağız.',
@@ -9,7 +8,6 @@ export const CANNED_RESPONSES: string[] = [
   'Bu konu için sizi yerinde ziyaret etmemiz gerekiyor, uygun bir saat belirtir misiniz?',
 ];
 
-// Kullanıcıların hızlıca seçebileceği hazır talep şablonları
 export interface TicketTemplate {
   label: string;
   title: string;
@@ -56,7 +54,6 @@ export const TICKET_TEMPLATES: TicketTemplate[] = [
   },
 ];
 
-// Sık Sorulan Sorular — kullanıcı kendi başına çözüm bulabilsin diye
 export interface FaqItem {
   question: string;
   answer: string;

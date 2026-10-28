@@ -3,16 +3,6 @@ using MyApp.Api.Models;
 
 namespace MyApp.Api.Services;
 
-// Windows/AD kimliğinden (SIRKET\ayse.yilmaz) ek profil bilgilerini çeker:
-// tam ad, e-posta, departman, unvan, yönetici, telefon, ofis.
-//
-// ÖNEMLİ: System.DirectoryServices.AccountManagement sadece domain'e bağlı bir Windows
-// makinesinde çalışır. Linux/Mac'te veya domain dışı bir ortamda çağrıldığında sessizce
-// başarısız olur (try/catch ile yutulur) — böylece geliştirme ortamında giriş akışını bozmaz.
-//
-// NOT: Derleme sırasında CA1416 uyarıları görebilirsin ("Bu çağrı sitesine tüm platformlarda
-// ulaşılabilir..."). Bunlar sadece uyarıdır, derlemeyi ENGELLEMEZ — çünkü bu kod zaten
-// try/catch içinde ve sadece Windows'ta çalışacağını biliyoruz. Görmezden gelebilirsin.
 public class ActiveDirectoryService
 {
     private readonly ILogger<ActiveDirectoryService> _logger;
@@ -47,8 +37,6 @@ public class ActiveDirectoryService
 
             user.Phone = principal.VoiceTelephoneNumber;
 
-            // Departman, unvan, ofis ve yönetici gibi bilgiler UserPrincipal'da doğrudan
-            // yok — alttaki DirectoryEntry üzerinden okunuyor.
             if (principal.GetUnderlyingObject() is System.DirectoryServices.DirectoryEntry entry)
             {
                 user.Department = entry.Properties["department"]?.Value?.ToString();
@@ -62,8 +50,6 @@ public class ActiveDirectoryService
                     user.Manager = managerEntry.Properties["displayName"]?.Value?.ToString();
                 }
 
-                // Tanılama: bu alanlar AD'de gerçekten boşsa mı yoksa okunamadığı için mi
-                // boş kaldığını ayırt edebilmek için logluyoruz.
                 _logger.LogInformation(
                     "AD'den okunan ham değerler ({User}) -> department:'{Dept}' title:'{Title}' office:'{Office}' manager:'{Manager}'",
                     samAccountName, user.Department, user.JobTitle, user.Office, user.Manager);
@@ -75,7 +61,6 @@ public class ActiveDirectoryService
         }
         catch (Exception ex)
         {
-            // Domain dışı ortam, yetersiz izin, AD erişilemez vb. -> giriş akışını bozma, sadece logla.
             _logger.LogWarning(ex, "AD bilgileri çekilemedi ({User}). Muhtemelen domain dışı bir ortamdasınız.", windowsUsername);
         }
     }

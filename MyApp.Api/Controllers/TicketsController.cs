@@ -78,7 +78,6 @@ public class TicketsController : ControllerBase
 
     private bool CanAccess(Ticket t) => CurrentUserRole == nameof(UserRole.ITStaff) || t.CreatedByUserId == CurrentUserId;
 
-    // GET /api/tickets?search=...&status=...&category=...
     [HttpGet]
     public async Task<ActionResult<IEnumerable<TicketResponse>>> GetAll([FromQuery] string? search, [FromQuery] string? status, [FromQuery] string? category)
     {
@@ -138,7 +137,7 @@ public class TicketsController : ControllerBase
             CreatedAt = DateTime.UtcNow
         };
         _db.Tickets.Add(ticket);
-        await _db.SaveChangesAsync(); // Id'nin oluşması için önce kaydet
+        await _db.SaveChangesAsync();
 
         await AddAuditLogAsync("TicketCreated", "Ticket", ticket.Id,
             $"\"{ticket.Title}\" başlıklı talep oluşturuldu ({category}, {priority}).");
@@ -154,13 +153,11 @@ public class TicketsController : ControllerBase
 
         var response = await ToResponseAsync(ticket);
 
-        // Gerçek zamanlı: tüm IT personeline anında "🔴 Yeni Ticket" uyarısı
         await _hub.Clients.Group("staff").SendAsync("NewTicket", response);
 
         return CreatedAtAction(nameof(GetById), new { id = ticket.Id }, response);
     }
 
-    // Bir talebe sonradan cihaz bağlama/değiştirme (IT personeli)
     [HttpPut("{id:int}/link-asset")]
     [Authorize(Roles = "ITStaff")]
     public async Task<ActionResult<TicketResponse>> LinkAsset(int id, LinkAssetRequest request)
@@ -240,7 +237,6 @@ public class TicketsController : ControllerBase
         return Ok(response);
     }
 
-    // Kullanıcı, "Resolved" durumundaki kendi talebini onaylayıp kapatır.
     [HttpPost("{id:int}/confirm-close")]
     public async Task<ActionResult<TicketResponse>> ConfirmClose(int id)
     {
@@ -262,7 +258,6 @@ public class TicketsController : ControllerBase
         return Ok(await ToResponseAsync(ticket));
     }
 
-    // Kullanıcı, kapanmış talebine 1-5 arası memnuniyet puanı verir.
     [HttpPost("{id:int}/rate")]
     public async Task<ActionResult<TicketResponse>> Rate(int id, RateTicketRequest request)
     {
@@ -280,8 +275,6 @@ public class TicketsController : ControllerBase
         await _db.SaveChangesAsync();
         return Ok(await ToResponseAsync(ticket));
     }
-
-    // ---------- Talep Birleştirme ----------
 
     [HttpPost("{id:int}/merge")]
     [Authorize(Roles = "ITStaff")]
@@ -320,8 +313,6 @@ public class TicketsController : ControllerBase
         await _db.SaveChangesAsync();
         return Ok(await ToResponseAsync(source));
     }
-
-    // ---------- Toplu İşlemler ----------
 
     [HttpPut("bulk/assign")]
     [Authorize(Roles = "ITStaff")]
@@ -384,8 +375,6 @@ public class TicketsController : ControllerBase
         return Ok(results);
     }
 
-    // ---------- Yorumlar ----------
-
     [HttpGet("{id:int}/comments")]
     public async Task<ActionResult<IEnumerable<CommentResponse>>> GetComments(int id)
     {
@@ -429,15 +418,12 @@ public class TicketsController : ControllerBase
         var author = await CurrentUserAsync();
         var commentResponse = new CommentResponse(comment.Id, comment.TicketId, author.FullName, author.Role.ToString(), comment.Message, comment.CreatedAt);
 
-        // Gerçek zamanlı: o an talebi açık tutan herkese anında "X yeni yorum yaptı"
         await _hub.Clients.Group($"ticket-{id}").SendAsync("NewComment", commentResponse);
         if (notifyUserId.HasValue)
             await _hub.Clients.Group($"user-{notifyUserId.Value}").SendAsync("NewNotification", $"#{ticket.Id}: {author.FullName} yeni bir yorum yaptı.");
 
         return Ok(commentResponse);
     }
-
-    // ---------- Dosya Ekleri ----------
 
     [HttpGet("{id:int}/attachments")]
     public async Task<ActionResult<IEnumerable<AttachmentResponse>>> GetAttachments(int id)

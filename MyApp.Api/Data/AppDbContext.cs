@@ -17,13 +17,6 @@ public class AppDbContext : DbContext
     public DbSet<Asset> Assets => Set<Asset>();
     public DbSet<BrandSettings> BrandSettings => Set<BrandSettings>();
 
-    // SQL Server'ın datetime2 sütunu zaman dilimi bilgisi saklamaz. Bu yüzden UTC olarak
-    // kaydedilen bir tarih, geri okunduğunda "belirsiz" (Unspecified) olarak gelir ve
-    // JSON'a sonunda 'Z' işareti OLMADAN yazılır. Tarayıcı da onu yerel saat sanıp
-    // olduğu gibi gösterir — Türkiye'de saatler 3 saat geri görünürdü.
-    //
-    // Aşağıdaki dönüştürücüler, okunan her tarihi açıkça UTC olarak işaretler; böylece
-    // JSON'a '...Z' ile gider ve tarayıcı doğru yerel saate çevirir.
     public class UtcDateTimeConverter : ValueConverter<DateTime, DateTime>
     {
         public UtcDateTimeConverter() : base(
@@ -55,13 +48,12 @@ public class AppDbContext : DbContext
     {
         base.OnModelCreating(modelBuilder);
 
-        // --- User ---
         modelBuilder.Entity<User>(entity =>
         {
             entity.HasIndex(u => u.Email).IsUnique();
             entity.HasIndex(u => u.WindowsUsername)
                   .IsUnique()
-                  .HasFilter("[WindowsUsername] IS NOT NULL"); // birden fazla NULL'a izin ver
+                  .HasFilter("[WindowsUsername] IS NOT NULL");
 
             entity.Property(u => u.FullName).HasMaxLength(150).IsRequired();
             entity.Property(u => u.Email).HasMaxLength(200).IsRequired();
@@ -75,7 +67,6 @@ public class AppDbContext : DbContext
             entity.Property(u => u.Role).HasConversion<string>().HasMaxLength(20);
         });
 
-        // --- Ticket ---
         modelBuilder.Entity<Ticket>(entity =>
         {
             entity.Property(t => t.Title).HasMaxLength(200).IsRequired();
@@ -94,14 +85,11 @@ public class AppDbContext : DbContext
                   .HasForeignKey(t => t.AssignedToUserId)
                   .OnDelete(DeleteBehavior.Restrict);
 
-            // Bir talebin başka bir talebe birleştirilmiş olması -> kendi kendine referans,
-            // silme davranışı zincirlenmesin diye kısıtlı (Restrict).
             entity.HasOne<Ticket>()
                   .WithMany()
                   .HasForeignKey(t => t.MergedIntoTicketId)
                   .OnDelete(DeleteBehavior.Restrict);
 
-            // Talebin ilgili olduğu cihaz (opsiyonel)
             entity.HasOne<Asset>()
                   .WithMany()
                   .HasForeignKey(t => t.AssetId)
@@ -111,7 +99,6 @@ public class AppDbContext : DbContext
             entity.HasIndex(t => t.CreatedAt);
         });
 
-        // --- TicketComment ---
         modelBuilder.Entity<TicketComment>(entity =>
         {
             entity.Property(c => c.Message).HasMaxLength(2000).IsRequired();
@@ -128,12 +115,10 @@ public class AppDbContext : DbContext
                   .OnDelete(DeleteBehavior.Restrict);
         });
 
-        // --- TicketAttachment ---
         modelBuilder.Entity<TicketAttachment>(entity =>
         {
             entity.Property(a => a.FileName).HasMaxLength(260).IsRequired();
             entity.Property(a => a.ContentType).HasMaxLength(100).IsRequired();
-            // Base64 dosya içeriği büyük olabileceği için sınırsız (nvarchar(max))
             entity.Property(a => a.DataBase64).HasColumnType("nvarchar(max)");
             entity.HasIndex(a => a.TicketId);
 
@@ -148,7 +133,6 @@ public class AppDbContext : DbContext
                   .OnDelete(DeleteBehavior.Restrict);
         });
 
-        // --- AppNotification ---
         modelBuilder.Entity<AppNotification>(entity =>
         {
             entity.Property(n => n.Message).HasMaxLength(500).IsRequired();
@@ -160,7 +144,6 @@ public class AppDbContext : DbContext
                   .OnDelete(DeleteBehavior.Cascade);
         });
 
-        // --- AuditLog ---
         modelBuilder.Entity<AuditLog>(entity =>
         {
             entity.Property(a => a.Action).HasMaxLength(60).IsRequired();
@@ -168,10 +151,8 @@ public class AppDbContext : DbContext
             entity.Property(a => a.PerformedByName).HasMaxLength(150).IsRequired();
             entity.Property(a => a.Details).HasMaxLength(1000).IsRequired();
             entity.HasIndex(a => a.Timestamp);
-            // PerformedByUserId sistem eylemlerinde 0 olabildiği için FK kısıtı yok, kasıtlı olarak.
         });
 
-        // --- Asset (Envanter) ---
         modelBuilder.Entity<Asset>(entity =>
         {
             entity.HasIndex(a => a.AssetTag).IsUnique();
@@ -195,11 +176,8 @@ public class AppDbContext : DbContext
                   .OnDelete(DeleteBehavior.SetNull);
         });
 
-        // --- BrandSettings (tek satırlık ayar tablosu) ---
         modelBuilder.Entity<BrandSettings>(entity =>
         {
-            // Bu tablo her zaman tek bir satır (Id=1) içerir, Id elle atanır — otomatik
-            // artan (identity) OLMAMALI, yoksa "IDENTITY_INSERT" hatası alınır.
             entity.Property(b => b.Id).ValueGeneratedNever();
             entity.Property(b => b.CompanyName).HasMaxLength(150).IsRequired();
             entity.Property(b => b.LogoContentType).HasMaxLength(100);

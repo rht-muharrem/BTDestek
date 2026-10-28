@@ -1,11 +1,6 @@
 using MyApp.Api.Models;
 
 namespace MyApp.Api.Services;
-
-// Varsayılan öneri motoru: anahtar kelime eşleştirmesiyle çalışır, herhangi bir dış API'ye
-// veya anahtara ihtiyaç duymaz. Gerçek bir LLM'e (örn. Claude API) geçmek istediğinde
-// Program.cs'te bu servisin kaydını ClaudeAiSuggestionService ile değiştirmen yeterli —
-// ikisi de aynı IAiSuggestionService arayüzünü kullanıyor.
 public class RuleBasedAiSuggestionService : IAiSuggestionService
 {
     private record Rule(TicketCategory Category, string Subcategory, string Team, string[] Keywords);
@@ -28,7 +23,6 @@ public class RuleBasedAiSuggestionService : IAiSuggestionService
     private static readonly string[] HighWords = { "çalışamıyorum", "hiç açılmıyor", "tamamen", "kritik" };
     private static readonly string[] LowWords = { "ara sıra", "bazen", "küçük", "önemli değil", "acil değil" };
 
-    // Kategoriye göre kullanıcının talep açmadan önce kendi deneyebileceği basit adımlar.
     private static readonly Dictionary<TicketCategory, string[]> SolutionSteps = new()
     {
         [TicketCategory.Network] = new[]
@@ -92,15 +86,11 @@ public class RuleBasedAiSuggestionService : IAiSuggestionService
     {
         var text = $"{title} {description}".ToLowerInvariant();
         var (category, subcategory, team, score, matchedKeywords) = DetectCategory(text);
-
-        // --- Öncelik: acil/kritik ifadeler var mı ---
         TicketPriority priority;
         if (CriticalWords.Any(text.Contains)) priority = TicketPriority.Critical;
         else if (HighWords.Any(text.Contains)) priority = TicketPriority.High;
         else if (LowWords.Any(text.Contains)) priority = TicketPriority.Low;
         else priority = TicketPriority.Medium;
-
-        // --- Benzer talepler: başlık+açıklamada kelime örtüşmesine göre en yakın 3 talep ---
         var inputWords = Tokenize(text);
         var similar = recentTickets
             .Select(t => new
@@ -131,7 +121,7 @@ public class RuleBasedAiSuggestionService : IAiSuggestionService
 
     private static HashSet<string> Tokenize(string text) =>
         text.Split(new[] { ' ', ',', '.', '!', '?', '\n', '\r', '\t' }, StringSplitOptions.RemoveEmptyEntries)
-            .Where(w => w.Length > 3) // çok kısa kelimeleri (ve, bir, bu...) eleyerek gürültüyü azalt
+            .Where(w => w.Length > 3)
             .ToHashSet();
 
     private static int OverlapScore(HashSet<string> a, HashSet<string> b) => a.Intersect(b).Count();

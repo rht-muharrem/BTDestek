@@ -9,7 +9,7 @@ export function AppLayout({ children }: { children: ReactNode }) {
 
   return (
     <div className="app-shell">
-      {/* Sadece mobilde görünen üst çubuk */}
+      {}
       <div className="mobile-topbar">
         <button className="hamburger-btn" onClick={() => setMobileOpen(true)} aria-label="Menüyü aç">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
